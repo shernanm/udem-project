@@ -13,16 +13,11 @@ Nvm approach is preferred.
 
 Run `npm install` or `yarn` from rootpath of the project.
 
-
 #### Starting your app
 
 Now, we have two ways to start an app. To start your app in production mode run `npm start` in the root path of your project. To start your app in development mode (nodemon) run `npm run start-dev`. Then access your app at **localhost:port**. The port is logged in the console where you ran the start script.
 
 ## Development
-
-#### Environments
-
-By default, the environment will be **development**, but you can easily change it using the **NODE_ENV** environmental variable.
 
 #### Environment variables
 
@@ -31,11 +26,8 @@ By default, the environment will be **development**, but you can easily change i
 The environment variables should be added to the `.env` file in the form of `NAME=VALUE`, as the following example:
 
 ```
-DB_USERNAME=root
-DB_PASS=superpass
-DB_PASSWORD=superpass
-PORT=8081
-CLIENTS_API=http://api.clients.example.org/
+MONGO_DB_URI
+PORT=8080
 ```
 
 **Remember not to push nor commit the `.env` file.**
@@ -56,33 +48,6 @@ if (error) {
 }
 ```
 
-#### Testing
-
-To run your tests you first need to config your testing database by setting the env var `DB_NAME_TEST`. as explained
-before in [Database configuration](#database-configuration). Also you need to run the migrations in this exclusive
-testing database each time you have new ones, you can do this by running the command `npm run migrations-test`.
-Once you have all the above done you can run your tests with the following command: `npm test`. For more information refeer to the documentation of [Jest](https://jestjs.io/docs/en/getting-started).
-
-
-#### Debugging
-
-As we know, a NodeJS application is not something easy to debug and because of that we've added the `--inspect` flag to make it simpler. You can download a node inspection manager for Chrome, so Chrome DevTools will automatically start when you run your app using `npm run start-dev`, making your debugging easier. You can read more about the different inspector clients here: <https://nodejs.org/de/docs/guides/debugging-getting-started/#inspector-clients>
-
-#### REPL console
-
-We can use a node console with `npm run console`. There your service objects are exposed as _servicename_ + "Service". Let's suppose that we have a service `users` which has a function `getAll`. In your console you can call `usersService.getAll()` and see the result. Note that this works also with functions that return promises! To exit the console use `.exit`.
-
-#### Documentation
-
-Documentation will be served at `/docs`. We use [OpenAPI](https://github.com/OAI/OpenAPI-Specification) A.K.A `Swagger`. Check [this link](https://medium.com/wolox-driving-innovation/documenting-a-nodejs-rest-api-with-openapi-3-swagger-5deee9f50420) for more details on how to use it.
-
-## Deploy
-
-#### Heroku
-
-Pushing the desired branch to heroku should be enough.
-For more information check: https://devcenter.heroku.com/articles/getting-started-with-nodejs#define-a-procfile.
-
 ## Contributing
 
 1. Fork it
@@ -91,33 +56,3 @@ For more information check: https://devcenter.heroku.com/articles/getting-starte
 4. Commit your changes (`git commit -am 'Add some feature'`)
 5. Push to the branch (`git push origin my-new-feature`)
 6. Create new Pull Request
-
-## About
-
-This project is maintained by [Wolox](https://github.com/wolox) and it was written by [Wolox](http://www.wolox.com.ar).
-
-![Wolox](https://raw.githubusercontent.com/Wolox/press-kit/master/logos/logo_banner.png)
-
-## License
-
-**udem-project** is available under the MIT [license](LICENSE.md).
-
-    Copyright (c) 2019 Wolox
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in
-    all copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-    THE SOFTWARE.

@@ -1,25 +1,24 @@
-const { expressMiddleware, expressRequestIdMiddleware } = require('express-wolox-logger');
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-const swaggerUi = require('swagger-ui-express');
-const config = require('./config');
+const mongoose = require('mongoose');
 const routes = require('./app/routes');
-const errors = require('./app/middlewares/errors');
-const documentation = require('./documentation');
 const logger = require('./app/logger');
+
+const port = 8080;
 
 const DEFAULT_BODY_SIZE_LIMIT = 1024 * 1024 * 10;
 const DEFAULT_PARAMETER_LIMIT = 10000;
 
 const bodyParserJsonConfig = () => ({
-  parameterLimit: config.common.api.parameterLimit || DEFAULT_PARAMETER_LIMIT,
-  limit: config.common.api.bodySizeLimit || DEFAULT_BODY_SIZE_LIMIT
+  parameterLimit: DEFAULT_PARAMETER_LIMIT,
+  limit: DEFAULT_BODY_SIZE_LIMIT
 });
 
 const bodyParserUrlencodedConfig = () => ({
   extended: true,
-  parameterLimit: config.common.api.parameterLimit || DEFAULT_PARAMETER_LIMIT,
-  limit: config.common.api.bodySizeLimit || DEFAULT_BODY_SIZE_LIMIT
+  parameterLimit: DEFAULT_PARAMETER_LIMIT,
+  limit: DEFAULT_BODY_SIZE_LIMIT
 });
 
 const app = express();
@@ -27,13 +26,20 @@ const app = express();
 // Client must send "Content-Type: application/json" header
 app.use(bodyParser.json(bodyParserJsonConfig()));
 app.use(bodyParser.urlencoded(bodyParserUrlencodedConfig()));
-app.use(expressRequestIdMiddleware());
-app.use('/docs', swaggerUi.serve, swaggerUi.setup(documentation));
-
-if (!config.isTesting) app.use(expressMiddleware({ loggerFn: logger.info }));
-
+mongoose
+  .connect(process.env.MONGO_DB_URI, {
+    useUnifiedTopology: true,
+    useNewUrlParser: true,
+    autoIndex: true
+  })
+  .then(() => logger.info('Connected to MongoDB Atlas'))
+  .catch(error => logger.info(error));
 routes.init(app);
 
-app.use(errors.handle);
+Promise.resolve()
+  .then(() => {
+    app.listen(port);
 
-module.exports = app;
+    logger.info(`Listening on port: ${port}`);
+  })
+  .catch(logger.error);
